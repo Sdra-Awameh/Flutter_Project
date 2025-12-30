@@ -82,7 +82,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
               }
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF8B1538),
+              backgroundColor: Colors.white,
+              foregroundColor: const Color(0xFF8B1538),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              side: const BorderSide(color: Color(0xFF8B1538)),
             ),
             child: const Text('Logout'),
           ),
@@ -324,11 +329,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               child: ElevatedButton(
                                 onPressed: _saveProfile,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF8B1538),
+                                  backgroundColor: Colors.white,
+                                  foregroundColor: const Color(0xFF8B1538),
                                   padding: const EdgeInsets.symmetric(vertical: 16),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
+                                  side: const BorderSide(color: Color(0xFF8B1538)),
                                 ),
                                 child: const Text('Save'),
                               ),

@@ -160,21 +160,7 @@ class MyCoursesScreen extends StatelessWidget {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                              ),
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {},
-                              icon: const Icon(Icons.play_arrow),
-                              label: const Text('Continue'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF8B1538),
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
+                                padding: const EdgeInsets.symmetric(vertical: 16),
                               ),
                             ),
                           ),
@@ -245,7 +231,12 @@ class MyCoursesScreen extends StatelessWidget {
                 );
               },
               style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xFF8B1538),
+                backgroundColor: Colors.white,
+                foregroundColor: const Color(0xFF8B1538),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                side: const BorderSide(color: Color(0xFF8B1538)),
               ),
               child: const Text('Update'),
             ),
