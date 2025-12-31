@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/course_provider.dart';
+import '../providers/theme_provider.dart';
 import 'course_details_screen.dart';
 import 'my_courses_screen.dart';
 import 'profile_screen.dart';
@@ -24,23 +25,28 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Widget> get _screens => [
-        _buildHomeContent(),
-        const MyCoursesScreen(),
-        const ProfileScreen(),
-      ];
+    _buildHomeContent(),
+    const MyCoursesScreen(),
+    const ProfileScreen(),
+  ];
 
   Widget _buildHomeContent() {
     return Consumer<CourseProvider>(
       builder: (context, provider, child) {
+        final themeProvider = context.watch<ThemeProvider>();
         final courses = provider.allCourses.where((course) {
-          return course.title.toLowerCase().contains(_searchQuery.toLowerCase()) ||
-              course.category.toLowerCase().contains(_searchQuery.toLowerCase());
+          return course.title.toLowerCase().contains(
+                _searchQuery.toLowerCase(),
+              ) ||
+              course.category.toLowerCase().contains(
+                _searchQuery.toLowerCase(),
+              );
         }).toList();
 
         return Column(
           children: [
             Container(
-              color: const Color(0xFF8B1538),
+              color: themeProvider.primaryColor,
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,10 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 8),
                   const Text(
                     'Explore our courses',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                    ),
+                    style: TextStyle(color: Colors.white70, fontSize: 16),
                   ),
                   const SizedBox(height: 20),
                   TextField(
@@ -69,11 +72,28 @@ class _HomeScreenState extends State<HomeScreen> {
                         _searchQuery = value;
                       });
                     },
+                    style: TextStyle(
+                      color: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.black87
+                          : Colors.black87,
+                    ),
                     decoration: InputDecoration(
                       hintText: 'Search courses...',
-                      prefixIcon: const Icon(Icons.search),
+                      hintStyle: TextStyle(
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black54
+                            : Colors.black54,
+                      ),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black54
+                            : Colors.black54,
+                      ),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: Theme.of(context).brightness == Brightness.dark
+                          ? Colors.grey[200]
+                          : Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
@@ -90,7 +110,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         'No courses found',
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.grey[600],
+                          color: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.color?.withOpacity(0.6),
                         ),
                       ),
                     )
@@ -110,12 +132,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildCourseCard(course) {
+    final themeProvider = context.watch<ThemeProvider>();
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Card(
       margin: const EdgeInsets.only(bottom: 16),
       elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: InkWell(
         onTap: () {
           Navigator.push(
@@ -134,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 80,
                 height: 80,
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: isDark ? Colors.grey[800] : Colors.grey[100],
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Center(
@@ -160,7 +183,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       course.instructor,
                       style: TextStyle(
-                        color: Colors.grey[600],
+                        color: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.color?.withOpacity(0.6),
                         fontSize: 14,
                       ),
                     ),
@@ -170,13 +195,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         Icon(
                           Icons.play_circle_outline,
                           size: 16,
-                          color: Colors.grey[600],
+                          color: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.color?.withOpacity(0.6),
                         ),
                         const SizedBox(width: 4),
                         Text(
                           '${course.lessons} lessons',
                           style: TextStyle(
-                            color: Colors.grey[600],
+                            color: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.color?.withOpacity(0.6),
                             fontSize: 12,
                           ),
                         ),
@@ -184,13 +213,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         Icon(
                           Icons.access_time,
                           size: 16,
-                          color: Colors.grey[600],
+                          color: Theme.of(
+                            context,
+                          ).textTheme.bodyMedium?.color?.withOpacity(0.6),
                         ),
                         const SizedBox(width: 4),
                         Text(
                           course.duration,
                           style: TextStyle(
-                            color: Colors.grey[600],
+                            color: Theme.of(
+                              context,
+                            ).textTheme.bodyMedium?.color?.withOpacity(0.6),
                             fontSize: 12,
                           ),
                         ),
@@ -204,7 +237,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: const Color(0xFF8B1538),
+                          color: themeProvider.primaryColor,
                           borderRadius: BorderRadius.circular(4),
                         ),
                         child: const Text(
@@ -220,10 +253,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   ],
                 ),
               ),
-              const Icon(
+              Icon(
                 Icons.arrow_forward_ios,
                 size: 16,
-                color: Colors.grey,
+                color: Theme.of(
+                  context,
+                ).textTheme.bodyMedium?.color?.withOpacity(0.4),
               ),
             ],
           ),
@@ -234,6 +269,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+
     return Scaffold(
       body: _screens[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
@@ -243,20 +280,11 @@ class _HomeScreenState extends State<HomeScreen> {
             _currentIndex = index;
           });
         },
-        selectedItemColor: const Color(0xFF8B1538),
+        selectedItemColor: themeProvider.primaryColor,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: 'My Courses',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
+          BottomNavigationBarItem(icon: Icon(Icons.book), label: 'My Courses'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),
     );

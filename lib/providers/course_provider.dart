@@ -24,7 +24,8 @@ class CourseProvider extends ChangeNotifier {
       Course(
         id: '1',
         title: 'Flutter Development',
-        description: '📱 Build polished mobile apps with Flutter — widgets, state management, navigation, and platform integration for Mobile Development.',
+        description:
+            '📱 Build polished mobile apps with Flutter — widgets, state management, navigation, and platform integration for Mobile Development.',
         instructor: 'Dr. Ali Al-Alazzawi',
         lessons: 24,
         duration: '8 weeks',
@@ -34,7 +35,8 @@ class CourseProvider extends ChangeNotifier {
       Course(
         id: '2',
         title: 'Software Project Management',
-        description: '💼 Project management for Business: leadership, planning, risk management, and effective team coordination.',
+        description:
+            '💼 Project management for Business: leadership, planning, risk management, and effective team coordination.',
         instructor: 'Dr. Alaa Abu thawabeh',
         lessons: 18,
         duration: '6 weeks',
@@ -44,7 +46,8 @@ class CourseProvider extends ChangeNotifier {
       Course(
         id: '3',
         title: 'Data Science',
-        description: '📊 Data Science for Technology: data analysis, machine learning, visualization, and statistical modeling for data-driven decisions.',
+        description:
+            '📊 Data Science for Technology: data analysis, machine learning, visualization, and statistical modeling for data-driven decisions.',
         instructor: 'Dr. Hussam Mahasneh',
         lessons: 30,
         duration: '10 weeks',
@@ -54,7 +57,8 @@ class CourseProvider extends ChangeNotifier {
       Course(
         id: '4',
         title: 'Ethics in Software Engineering',
-        description: '📈 Ethics in Software Engineering: professional responsibility, algorithmic bias, privacy, and ethical decision-making in software projects.',
+        description:
+            '📈 Ethics in Software Engineering: professional responsibility, algorithmic bias, privacy, and ethical decision-making in software projects.',
         instructor: 'Dr. Hazem Al-Rabaeia',
         lessons: 20,
         duration: '7 weeks',
@@ -64,7 +68,8 @@ class CourseProvider extends ChangeNotifier {
       Course(
         id: '5',
         title: 'Graphic Design',
-        description: '🎨 Graphic Design: typography, layout, color theory, Adobe Creative Suite, and visual communication for Design projects.',
+        description:
+            '🎨 Graphic Design: typography, layout, color theory, Adobe Creative Suite, and visual communication for Design projects.',
         instructor: 'Dr. Mohamad Ali',
         lessons: 16,
         duration: '5 weeks',
@@ -117,7 +122,7 @@ class CourseProvider extends ChangeNotifier {
     if (enrolledIndex != -1) {
       _enrolledCourses[enrolledIndex].progress = progress;
       await _storage.saveEnrolledCourses(_enrolledCourses);
-      
+
       final allIndex = _allCourses.indexWhere((c) => c.id == courseId);
       if (allIndex != -1) {
         _allCourses[allIndex].progress = progress;

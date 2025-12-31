@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'providers/course_provider.dart';
+import 'providers/theme_provider.dart';
 import 'screens/login_screen.dart';
 
 void main() {
@@ -15,25 +16,21 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => CourseProvider()),
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        title: 'E-Learning',
-        theme: ThemeData(
-          primaryColor: const Color(0xFF8B1538),
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: const AppBarTheme(
-            backgroundColor: Color(0xFF8B1538),
-            foregroundColor: Colors.white,
-            elevation: 0,
-          ),
-          colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFF8B1538),
-            primary: const Color(0xFF8B1538),
-          ),
-          useMaterial3: true,
-        ),
-        home: const LoginScreen(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'E-Learning',
+            theme: themeProvider.lightTheme,
+            darkTheme: themeProvider.darkTheme,
+            themeMode: themeProvider.isDarkMode
+                ? ThemeMode.dark
+                : ThemeMode.light,
+            home: const LoginScreen(),
+          );
+        },
       ),
     );
   }

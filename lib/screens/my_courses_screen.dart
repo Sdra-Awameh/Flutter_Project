@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/course_provider.dart';
+import '../providers/theme_provider.dart';
 
 class MyCoursesScreen extends StatelessWidget {
   const MyCoursesScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final themeProvider = context.watch<ThemeProvider>();
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Courses'),
@@ -29,18 +32,12 @@ class MyCoursesScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Text(
                     'No enrolled courses yet',
-                    style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 18, color: Colors.grey[600]),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     'Start learning by enrolling in a course',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[500],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[500]),
                   ),
                 ],
               ),
@@ -52,6 +49,8 @@ class MyCoursesScreen extends StatelessWidget {
             itemCount: enrolledCourses.length,
             itemBuilder: (context, index) {
               final course = enrolledCourses[index];
+              final isDark = Theme.of(context).brightness == Brightness.dark;
+
               return Card(
                 margin: const EdgeInsets.only(bottom: 16),
                 elevation: 2,
@@ -69,7 +68,9 @@ class MyCoursesScreen extends StatelessWidget {
                             width: 70,
                             height: 70,
                             decoration: BoxDecoration(
-                              color: Colors.grey[100],
+                              color: isDark
+                                  ? Colors.grey[800]
+                                  : Colors.grey[100],
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Center(
@@ -95,7 +96,11 @@ class MyCoursesScreen extends StatelessWidget {
                                 Text(
                                   course.instructor,
                                   style: TextStyle(
-                                    color: Colors.grey[600],
+                                    color: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium
+                                        ?.color
+                                        ?.withOpacity(0.6),
                                     fontSize: 14,
                                   ),
                                 ),
@@ -112,15 +117,17 @@ class MyCoursesScreen extends StatelessWidget {
                             'Progress',
                             style: TextStyle(
                               fontSize: 14,
-                              color: Colors.grey[700],
+                              color: Theme.of(
+                                context,
+                              ).textTheme.bodyMedium?.color?.withOpacity(0.7),
                             ),
                           ),
                           Text(
                             '${(course.progress * 100).toInt()}%',
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF8B1538),
+                              color: themeProvider.primaryColor,
                             ),
                           ),
                         ],
@@ -130,9 +137,11 @@ class MyCoursesScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(4),
                         child: LinearProgressIndicator(
                           value: course.progress,
-                          backgroundColor: Colors.grey[200],
-                          valueColor: const AlwaysStoppedAnimation<Color>(
-                            Color(0xFF8B1538),
+                          backgroundColor: isDark
+                              ? Colors.grey[700]
+                              : Colors.grey[200],
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            themeProvider.primaryColor,
                           ),
                           minHeight: 8,
                         ),
@@ -148,19 +157,19 @@ class MyCoursesScreen extends StatelessWidget {
                                   course.id,
                                   course.progress,
                                   provider,
+                                  themeProvider,
                                 );
                               },
                               icon: const Icon(Icons.edit),
                               label: const Text('Update Progress'),
                               style: OutlinedButton.styleFrom(
-                                foregroundColor: const Color(0xFF8B1538),
-                                side: const BorderSide(
-                                  color: Color(0xFF8B1538),
+                                foregroundColor: themeProvider.primaryColor,
+                                side: BorderSide(
+                                  color: themeProvider.primaryColor,
                                 ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(8),
                                 ),
-                                padding: const EdgeInsets.symmetric(vertical: 16),
                               ),
                             ),
                           ),
@@ -182,6 +191,7 @@ class MyCoursesScreen extends StatelessWidget {
     String courseId,
     double currentProgress,
     CourseProvider provider,
+    ThemeProvider themeProvider,
   ) {
     double newProgress = currentProgress;
 
@@ -195,10 +205,10 @@ class MyCoursesScreen extends StatelessWidget {
             children: [
               Text(
                 '${(newProgress * 100).toInt()}%',
-                style: const TextStyle(
+                style: TextStyle(
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF8B1538),
+                  color: themeProvider.primaryColor,
                 ),
               ),
               Slider(
@@ -208,7 +218,7 @@ class MyCoursesScreen extends StatelessWidget {
                     newProgress = value;
                   });
                 },
-                activeColor: const Color(0xFF8B1538),
+                activeColor: themeProvider.primaryColor,
                 divisions: 20,
                 label: '${(newProgress * 100).toInt()}%',
               ),
@@ -224,20 +234,12 @@ class MyCoursesScreen extends StatelessWidget {
                 provider.updateProgress(courseId, newProgress);
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Progress updated successfully'),
-                    backgroundColor: Color(0xFF8B1538),
+                  SnackBar(
+                    content: const Text('Progress updated successfully'),
+                    backgroundColor: themeProvider.primaryColor,
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.white,
-                foregroundColor: const Color(0xFF8B1538),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                side: const BorderSide(color: Color(0xFF8B1538)),
-              ),
               child: const Text('Update'),
             ),
           ],

@@ -7,6 +7,8 @@ class StorageService {
   static const String userKey = 'user_data';
   static const String coursesKey = 'enrolled_courses';
   static const String isLoggedInKey = 'is_logged_in';
+  static const String themeDarkModeKey = 'theme_dark_mode';
+  static const String themePrimaryColorKey = 'theme_primary_color';
 
   Future<void> saveUser(User user) async {
     final prefs = await SharedPreferences.getInstance();
@@ -47,5 +49,26 @@ class StorageService {
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.clear();
+  }
+
+  // Theme preferences
+  Future<bool> getThemeDarkMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(themeDarkModeKey) ?? false;
+  }
+
+  Future<void> setThemeDarkMode(bool isDarkMode) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(themeDarkModeKey, isDarkMode);
+  }
+
+  Future<int> getThemePrimaryColor() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getInt(themePrimaryColorKey) ?? 0xFF8B1538;
+  }
+
+  Future<void> setThemePrimaryColor(int colorValue) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setInt(themePrimaryColorKey, colorValue);
   }
 }
